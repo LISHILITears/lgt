@@ -1,0 +1,27 @@
+name: Upload to OSF
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  upload-to-osf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install OSF client
+        run: pip install osfclient
+
+      - name: Upload data to OSF
+        env:
+          OSF_TOKEN: ${{ secrets.OSF_TOKEN }}
+        run: |
+          osf -p your_project_id upload ./path/to/your/data /osf/target/path
